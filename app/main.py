@@ -1,18 +1,25 @@
 """
 AI Code Review Agent - main application entrypoint.
-
-Day 1: bare FastAPI skeleton with a health check endpoint.
-We'll build out the webhook receiver, diff fetcher, and LLM review
-logic in the days that follow.
 """
 
+import logging
+
+from dotenv import load_dotenv
 from fastapi import FastAPI
+
+from app.webhooks import router as webhook_router
+
+load_dotenv()
+
+logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(
     title="AI Code Review Agent",
     description="An agent that automatically reviews GitHub pull requests using an LLM.",
     version="0.1.0",
 )
+
+app.include_router(webhook_router)
 
 
 @app.get("/")
